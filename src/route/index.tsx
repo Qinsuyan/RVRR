@@ -1,8 +1,13 @@
 
-import React from "react";
+import Loading from "@/components/Loading";
+import React, { LazyExoticComponent, Suspense } from "react";
 import { lazy } from "react";
 import { Navigate, RouteObject, createBrowserRouter } from "react-router-dom";
-
+const componentLoading = (children: LazyExoticComponent<React.FC>) => {
+  return (
+    <Suspense fallback={<Loading />}>{React.createElement(children)}</Suspense>
+  );
+};
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -10,11 +15,11 @@ const routes: RouteObject[] = [
   },
   {
     path: "/welcome",
-    element: React.createElement(lazy(() => import("@/pages/Welcome"))),
+    element: componentLoading(lazy(() => import("@/pages/Welcome"))),
   },
   {
     path: "/count",
-    element: React.createElement(lazy(() => import("@/pages/Count"))),
+    element: componentLoading(lazy(() => import("@/pages/Count"))),
   },
 ];
 const router = createBrowserRouter(routes);
